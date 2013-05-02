@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Th entry:</b>
+  <%= @th_entry.th_entry_id %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%= @th_entry.title %>
+</p>
+
+<p>
+  <b>:</b>
+  <%= @th_entry.description %>
+</p>
+
+<p>
+  <b>Th sequence default:</b>
+  <%= @th_entry.th_sequence_default_id %>
+</p>
+
+<p>
+  <b>Th mod info:</b>
+  <%= @th_entry.th_mod_info %>
+</p>
+
+
+<%= link_to 'Edit', edit_th_entry_path(@th_entry) %> |
+<%= link_to 'Back', th_entries_path %>

@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Synset:</b>
+  <%= @synset_t2_map.synset_id %>
+</p>
+
+<p>
+  <b>Th phrase definition:</b>
+  <%= @synset_t2_map.th_phrase_definition_id %>
+</p>
+
+<p>
+  <b>Th sequence:</b>
+  <%= @synset_t2_map.th_sequence_id %>
+</p>
+
+<p>
+  <b>Primaries sequenced:</b>
+  <%= @synset_t2_map.primaries_sequenced %>
+</p>
+
+<p>
+  <b>Similars sequenced:</b>
+  <%= @synset_t2_map.similars_sequenced %>
+</p>
+
+<p>
+  <b>Antonyms sequenced:</b>
+  <%= @synset_t2_map.antonyms_sequenced %>
+</p>
+
+<p>
+  <b>Group num:</b>
+  <%= @synset_t2_map.group_num %>
+</p>
+
+
+<%= link_to 'Edit', edit_synset_t2_map_path(@synset_t2_map) %> |
+<%= link_to 'Back', synset_t2_maps_path %>

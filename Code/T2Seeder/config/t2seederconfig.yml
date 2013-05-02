@@ -1,0 +1,89 @@
+---
+# Configuration file for the T2 Seeder
+# Last Update 3/25/2013
+        development:
+          thesortus:
+            domain: en_us.language.lexical
+            parent: ROOT
+          user:
+            username: t2seeder_080 
+            id:   1
+            cms_user_id: 1
+            # password: abc123
+          editor:
+            action:
+              new: &ed_action
+                name: t2seeder_new
+                description: "Entry newly added to the T2 DB by T2Seeder"
+              modify:
+                name: t2seeder_modify
+                description: "Entry modified by T2Seeder"
+              delete:
+                name: t2seeder_delete
+                description: "Entry deleted from the T2 DB by T2Seeder"
+          ontoltoolkit: &toolkit
+              #& <id> denotes a local alias anchor property that can be used elsewhere 
+            name:     ruby-wordnet
+            version:  "1.0"
+            type:
+              name:      lexical
+              category:   
+            description:  "The ruby-wordnet gem, using it's default DB"
+            ontology: &ontol
+              name:      Wordnet
+              version:   "3.0 DefaultDB" 
+              classname: WordNet::Lexicon
+              description: "The WordNet 3.0 default DB"
+              type:     
+                name:        lexicon
+                category:    "english" 
+
+          algorithm: &alg
+            name:         t2seeder_v1.10
+            description:  "This is the finest seeding algorithm in the history of the world."
+
+          #BEGIN defaults for T2Seeder to use when it has no access to better data
+          defaults:  
+            sorttype:
+              label: default_t2seeder_sorttype
+              descr: 'Default sort type for T2Seeder auto-generated, newly added T2 sequence.'
+
+            sortdirection:
+              label: default_t2seeder_sortdirection
+              descr: 'Default sort direction for T2Seeder auto-generated, newly added T2 sequence.'
+
+            source_type:
+              name: default_source_type
+              description: 'Default source type for T2Seeder'
+
+            source: 
+              name: default_source_name
+              description: default_source_description
+
+            editor_action: 
+                name: default_editor_action_name
+                description: default_editor_action_description
+
+            metadata:
+              key: t2seeder_default_metadata_key
+              description: 'Default metadata key for T2Seeder'
+              value: t2seeder_default_metadata_value
+
+            data_type:
+              name: default_data_type
+              description: 'Default data type for T2Seeder'
+
+            phrase: 
+              lemma: dummy_phrase
+              definition: dummy_definition
+            phrase_definition: dummy_phrase_definition
+            pos: 
+              name: noun
+              abbr: noun
+
+            external_ref_id: -1
+
+            ordinality: 1
+            #END defaults
+                
+

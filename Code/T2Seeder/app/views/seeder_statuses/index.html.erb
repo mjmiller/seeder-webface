@@ -1,0 +1,27 @@
+<h1>Listing seeder_statuses</h1>
+
+<table>
+  <tr>
+    <th>Pos</th>
+    <th>Group num</th>
+    <th>Offset</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @seeder_statuses.each do |seeder_status| %>
+  <tr>
+    <td><%= seeder_status.pos %></td>
+    <td><%= seeder_status.group_num %></td>
+    <td><%= seeder_status.offset %></td>
+    <td><%= link_to 'Show', seeder_status %></td>
+    <td><%= link_to 'Edit', edit_seeder_status_path(seeder_status) %></td>
+    <td><%= link_to 'Destroy', seeder_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Seeder status', new_seeder_status_path %>

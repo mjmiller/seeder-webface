@@ -1,0 +1,12 @@
+#  © Copyright 2013 Groove Unlimited, LLC - All Rights Reserved.
+#  Unauthorized copying of this file via any medium is strictly prohibited. 
+#  Content herein may be proprietary and/or confidential.
+#
+# Static content for the th_thesortus table
+######
+#######################################################################
+# TODO: These ids are hardcoded. Be sure to coordinate with domains.txt
+#######################################################################
+######
+ ROOT: {parentid: '1', domainid: '1'}
+ T2: {parentid: '1', domainid: '2'}

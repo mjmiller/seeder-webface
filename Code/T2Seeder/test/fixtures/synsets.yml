@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  wnsynsetid: 1
+  found: false
+  processed: false
+
+two:
+  wnsynsetid: 1
+  found: false
+  processed: false

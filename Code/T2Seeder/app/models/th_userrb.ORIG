@@ -1,0 +1,6 @@
+class ThUser < ActiveRecord::Base
+    self.table_name = 'th_user'
+    self.primary_key = :th_userId
+
+    has_many :th_sources, :class_name => 'ThSource'    
+end

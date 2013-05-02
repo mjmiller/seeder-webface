@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Pos:</b>
+  <%= @seeder_status.pos %>
+</p>
+
+<p>
+  <b>Group num:</b>
+  <%= @seeder_status.group_num %>
+</p>
+
+<p>
+  <b>Offset:</b>
+  <%= @seeder_status.offset %>
+</p>
+
+
+<%= link_to 'Edit', edit_seeder_status_path(@seeder_status) %> |
+<%= link_to 'Back', seeder_statuses_path %>

@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  synset_id: 1
+  phrase_def_id: 1
+
+two:
+  synset_id: 1
+  phrase_def_id: 1

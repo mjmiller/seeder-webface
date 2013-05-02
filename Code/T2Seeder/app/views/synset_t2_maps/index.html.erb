@@ -1,0 +1,35 @@
+<h1>Listing synset_t2_maps</h1>
+
+<table>
+  <tr>
+    <th>Synset</th>
+    <th>Th phrase definition</th>
+    <th>Th sequence</th>
+    <th>Primaries sequenced</th>
+    <th>Similars sequenced</th>
+    <th>Antonyms sequenced</th>
+    <th>Group num</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @synset_t2_maps.each do |synset_t2_map| %>
+  <tr>
+    <td><%= synset_t2_map.synset_id %></td>
+    <td><%= synset_t2_map.th_phrase_definition_id %></td>
+    <td><%= synset_t2_map.th_sequence_id %></td>
+    <td><%= synset_t2_map.primaries_sequenced %></td>
+    <td><%= synset_t2_map.similars_sequenced %></td>
+    <td><%= synset_t2_map.antonyms_sequenced %></td>
+    <td><%= synset_t2_map.group_num %></td>
+    <td><%= link_to 'Show', synset_t2_map %></td>
+    <td><%= link_to 'Edit', edit_synset_t2_map_path(synset_t2_map) %></td>
+    <td><%= link_to 'Destroy', synset_t2_map, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Synset t2 map', new_synset_t2_map_path %>

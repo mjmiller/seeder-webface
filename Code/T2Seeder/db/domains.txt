@@ -1,0 +1,15 @@
+#  © Copyright 2013 Groove Unlimited, LLC - All Rights Reserved.
+#  Unauthorized copying of this file via any medium is strictly prohibited. 
+#  Content herein may be proprietary and/or confidential.
+#
+# Static content for the th_domain table
+#
+######
+########################################################################
+# TODO: These ids are hardcoded. Be sure to coordinate with thesorti.txt
+########################################################################
+######
+ ROOT: {name: 'ROOT', description: 'Universe/Root domain' }
+ LexUSENLang: { name: 'en_us.language.lexical', description: 'U.S. English language lexicon' }
+ LexSPESPLang: { name: 'es_sp.language.lexical', description: 'Spain Spanish language lexicon' }
+ LexLAESPLang: { name: 'es_la.language.lexical', description: 'Latin America Spanish language lexicon' }

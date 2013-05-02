@@ -1,0 +1,5 @@
+class OntolToolKitType < ActiveRecord::Base
+
+
+
+end

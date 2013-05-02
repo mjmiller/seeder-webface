@@ -1,0 +1,2 @@
+module ThEntriesHelper
+end

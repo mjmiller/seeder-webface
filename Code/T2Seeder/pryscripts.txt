@@ -1,0 +1,154 @@
+#  © Copyright 2013 Groove Unlimited, LLC - All Rights Reserved.
+#  Unauthorized copying of this file via any medium is strictly prohibited. 
+#  Content herein may be proprietary and/or confidential.
+
+# This file contains a list of pry/irb prompt commands to use during
+# development (and eventual production) of the T2 Seeder. 
+
+
+
+load 'config/environment.rb'
+load 'config/initializers/loadt2seederconfig.rb'
+load 'app/utils/t2constants.rb'
+load 'app/seedhandler.rb'
+
+# Care should be taken before issuing the following command as 
+# it clears the database tables so far created by the T2 Seeder.
+SeedHandler.clear(["SynsetT2Map", "ThThesortusEntry", "ThEntrySequence", "ThEntry", "ThMember", "ThSequence", "ThSortTypeDirection", "ThSortDirection", "ThSortType", "ThMetadatum", "ThMetadataKey", "ThPhraseDefinition", "ThPhrase", "ThDefinition", "ThModInfo", "ThSource"])
+
+SeedHandler.truncate(["synset_t2_maps", "th_thesortus_entry", "th_entry_sequence", "th_entry", "th_member", "th_sequence", "th_sort_type_direction", "th_sort_direction", "th_sort_type", "th_metadata", "th_metadata_key", "th_phrase_definition", "th_phrase", "th_definition", "th_mod_info", "th_source"])
+
+#####load 'db/seeds.rb'
+load 'app/developer.rb'
+load 'app/t2seeder.rb'
+load 'app/seedhandler.rb'
+load 'app/models/synset.rb'
+
+lim = 3
+offset = 0
+i=0
+j=10
+until i > j do
+puts "offset: "+(i*lim).to_s
+T2seeder.gatherSynsets(['nouns','verbs','adjectives','adverbs'], lim, i*lim)
+i +=1
+puts "+++++++++++++"
+end
+
+ssets = T2seeder.perform(:GATHER_SSETS)
+groupnum = 2
+T2seeder.perform(:CONVERT_SSETS, ssets, groupnum)
+T2seeder.perform(:SEQ_SSETS,[],groupnum)
+T2seeder.perform(:SEQ_PRIM_MEMBRS,[],groupnum)
+T2seeder.perform(:SEQ_SIM_MEMBRS,[],groupnum)
+T2seeder.perform(:SEQ_ANT_MEMBRS,[],groupnum)
+
+
+smynsets = Array.new
+smynsets.push(Lexs[300979366])
+smynsets.push(Lexs[300979862])
+smynsets.push(Lexs[300976508])
+smynsets.push(Lexs[300980527])
+smynsets.push(Lexs[300002098])
+smynsets.push(Lexs[300001740])
+
+groupno = 3
+T2seeder.perform(:CONVERT_SSETS, smynsets, groupno)
+T2seeder.perform(:SEQ_SSETS,[],groupno)
+T2seeder.perform(:SEQ_PRIM_MEMBRS,[],groupno)
+T2seeder.perform(:SEQ_SIM_MEMBRS,[],groupno)
+T2seeder.perform(:SEQ_ANT_MEMBRS,[],groupno)
+
+
+
+T2seeder.start(smynsets)
+
+T2seeder.start
+
+
+#able/unable is an example wordnet antonym pair 
+antsynsets = Array.new
+'able'.en.synsets.each do |able|
+antsynsets.push(able)
+end
+'unable'.en.synsets.each do |unable|
+antsynsets.push(unable)
+end
+T2seeder.start(antsynsets)
+
+Synset.findAntonyms('able'.en.synset)
+Synset.findAntonyms('umable'.en.synset)
+
+#speedy/fast is an example of wordnet similar words
+#but fast/speedy is not :)
+
+#specific limited items
+simsynsets = Array.new
+simsynsets.push(Lexs[300979366])
+simsynsets.push(Lexs[300979862])
+simsynsets.push(Lexs[300976508])
+T2seeder.start(simsynsets)
+
+
+#singular
+simsynsets = Array.new
+simsynsets.push('fast'.en.synset)
+simsynsets.push('speedy'.en.synset)
+T2seeder.start(simsynsets)
+
+#plural
+simsynsets = Array.new
+'fast'.en.synsets.each do |fast|
+simsynsets.push(fast)
+end
+'speedy'.en.synsets.each do |speedy|
+simsynsets.push(speedy)
+end
+T2seeder.start(simsynsets)
+
+s = Seedhandler.new
+
+s.seedSynsets('fast'.en.synsets)
+s.sequenceSynsets('fast'.en.synsets)
+s.sequencePrimaries('fast'.en.synsets)
+s.sequenceSimilars('fast'.en.synsets)  
+
+s.seedSynsets('speedy'.en.synsets)
+s.sequenceSynsets('speedy'.en.synsets)
+s.sequencePrimaries('speedy'.en.synsets)
+s.sequenceSimilars('speedy'.en.synsets)
+
+'speedy'.en.synset.similar_words
+s.sequenceSimilars('speedy'.en.synsets)
+
+
+1.9.3 (main):0 > Lexs[300976508]
+=> #<WordNet::Synset:0x7fbd4c902fc0 {300976508} 'fast' (adjective): [adj.all] acting or moving or capable of acting or moving quickly>
+1.9.3 (main):0 > Lexs[300976508].similar_words
+=> [#<WordNet::Synset:0x7fbd4fcd08c0 {300977105} 'accelerated' (adjective satellite): [adj.all] speeded up, as of an academic course>,
+ #<WordNet::Synset:0x7fbd4fcd0780 {300977238} 'alacritous' (adjective satellite): [adj.all] quick and eager>,
+ #<WordNet::Synset:0x7fbd4fcd0618 {300977372} 'blistering, hot, red-hot' (adjective satellite): [adj.all] very fast; capable of quick response and great speed>,
+ #<WordNet::Synset:0x7fbd4fcd04b0 {300977606} 'double-quick' (adjective satellite): [adj.all] (of a marching cadence) very quick>,
+ #<WordNet::Synset:0x7fbd4fcd0348 {300977699} 'express' (adjective satellite): [adj.all] without unnecessary stops>,
+ #<WordNet::Synset:0x7fbd4fcd01e0 {300977839} 'fast-breaking' (adjective satellite): [adj.all] occurring rapidly as a series of events in rapid succession>,
+ #<WordNet::Synset:0x7fbd4fcd0078 {300978059} 'fast-paced' (adjective satellite): [adj.all] of communication that proceeds rapidly>,
+ #<WordNet::Synset:0x7fbd4fccff38 {300978199} 'fleet, swift' (adjective satellite): [adj.all] moving very fast>,
+ #<WordNet::Synset:0x7fbd4fccfdf8 {300978429} 'high-speed, high-velocity' (adjective satellite): [adj.all] operating at high speed>,
+ #<WordNet::Synset:0x7fbd4fccfcb8 {300978581} 'hurrying, scurrying' (adjective satellite): [adj.all] moving with great haste>,
+ #<WordNet::Synset:0x7fbd4fccfb50 {300978754} 'immediate, prompt, quick, straightaway' (adjective satellite): [adj.all] performed with little or no delay>,
+ #<WordNet::Synset:0x7fbd4fccfa10 {300979031} 'instant, instantaneous' (adjective satellite): [adj.all] occurring with no delay>,
+ #<WordNet::Synset:0x7fbd4fccf8a8 {300979234} 'meteoric' (adjective satellite): [adj.all] like a meteor in speed or brilliance or transience>,
+ #<WordNet::Synset:0x7fbd4fccf740 {300979366} 'quick, speedy' (adjective satellite): [adj.all] accomplished rapidly and without delay>,
+ #<WordNet::Synset:0x7fbd4fccf5d8 {300979697} 'rapid' (adjective satellite): [adj.all] done or occurring in a brief period of time>,
+ #<WordNet::Synset:0x7fbd4fccf470 {300979862} 'rapid, speedy' (adjective satellite): [adj.all] characterized by speed; moving with or capable of moving with high speed>,
+ #<WordNet::Synset:0x7fbd4fccf330 {300980144} 'smart' (adjective satellite): [adj.all] quick and brisk>,
+ #<WordNet::Synset:0x7fbd4fccf1c8 {300980287} 'winged' (adjective satellite): [adj.all] very fast; as if with wings>,
+ #<WordNet::Synset:0x7fbd4fccf060 {300980385} 'windy' (adjective satellite): [adj.all] resembling the wind in speed, force, or variability>]
+1.9.3 (main):0 > Lexs[300979862]
+=> #<WordNet::Synset:0x7fbd4fbe2030 {300979862} 'rapid, speedy' (adjective satellite): [adj.all] characterized by speed; moving with or capable of moving with high speed>
+1.9.3 (main):0 > Lexs[300979862].similar_words
+=> [#<WordNet::Synset:0x7fbd4def77e0 {300976508} 'fast' (adjective): [adj.all] acting or moving or capable of acting or moving quickly>]
+1.9.3 (main):0 > Lexs[300979366]
+=> #<WordNet::Synset:0x7fbd4dd5d150 {300979366} 'quick, speedy' (adjective satellite): [adj.all] accomplished rapidly and without delay>
+1.9.3 (main):0 > Lexs[300979366].similar_words
+=> [#<WordNet::Synset:0x7fbd4dd535d8 {300976508} 'fast' (adjective): [adj.all] acting or moving or capable of acting or moving quickly>]

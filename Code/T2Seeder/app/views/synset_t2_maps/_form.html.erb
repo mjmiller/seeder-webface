@@ -1,0 +1,45 @@
+<%= form_for(@synset_t2_map) do |f| %>
+  <% if @synset_t2_map.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@synset_t2_map.errors.count, "error") %> prohibited this synset_t2_map from being saved:</h2>
+
+      <ul>
+      <% @synset_t2_map.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :synset_id %><br />
+    <%= f.number_field :synset_id %>
+  </div>
+  <div class="field">
+    <%= f.label :th_phrase_definition_id %><br />
+    <%= f.number_field :th_phrase_definition_id %>
+  </div>
+  <div class="field">
+    <%= f.label :th_sequence_id %><br />
+    <%= f.number_field :th_sequence_id %>
+  </div>
+  <div class="field">
+    <%= f.label :primaries_sequenced %><br />
+    <%= f.check_box :primaries_sequenced %>
+  </div>
+  <div class="field">
+    <%= f.label :similars_sequenced %><br />
+    <%= f.check_box :similars_sequenced %>
+  </div>
+  <div class="field">
+    <%= f.label :antonyms_sequenced %><br />
+    <%= f.check_box :antonyms_sequenced %>
+  </div>
+  <div class="field">
+    <%= f.label :group_num %><br />
+    <%= f.number_field :group_num %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

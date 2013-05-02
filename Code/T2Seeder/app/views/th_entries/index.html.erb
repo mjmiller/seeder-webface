@@ -1,0 +1,31 @@
+<h1>Listing th_entries</h1>
+
+<table>
+  <tr>
+    <th>Th entry</th>
+    <th>Title</th>
+    <th></th>
+    <th>Th sequence default</th>
+    <th>Th mod info</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @th_entries.each do |th_entry| %>
+  <tr>
+    <td><%= th_entry.th_entry_id %></td>
+    <td><%= th_entry.title %></td>
+    <td><%= th_entry.description %></td>
+    <td><%= th_entry.th_sequence_default_id %></td>
+    <td><%= th_entry.th_mod_info %></td>
+    <td><%= link_to 'Show', th_entry %></td>
+    <td><%= link_to 'Edit', edit_th_entry_path(th_entry) %></td>
+    <td><%= link_to 'Destroy', th_entry, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Th entry', new_th_entry_path %>

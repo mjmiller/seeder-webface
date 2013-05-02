@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  obj_type_id: 1
+  wn_id: 1
+  process_status_id: 1
+
+two:
+  obj_type_id: 1
+  wn_id: 1
+  process_status_id: 1

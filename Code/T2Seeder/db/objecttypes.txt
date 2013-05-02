@@ -1,0 +1,11 @@
+#  © Copyright 2013 Groove Unlimited, LLC - All Rights Reserved.
+#  Unauthorized copying of this file via any medium is strictly prohibited. 
+#  Content herein may be proprietary and/or confidential.
+#
+# Static content for the obj_types table
+#
+ synset: { name: 'synset', descr: 'A WordNet synset' }
+ word: { name: 'word', descr: 'A WordNet word' }
+ sense: { name: 'sense', descr: 'A WordNet sense' }
+ semlink: { name: 'semlink', descr: 'A WordNet semantic link' }
+ lexlink: { name: 'lexlink', descr: 'A WordNet lexical link' }
