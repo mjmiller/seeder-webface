@@ -1,0 +1,32 @@
+        development:
+           user:
+             username: t2seeder_080 
+             id:   1
+             cms_user_id: 1
+             # password: abc123
+           editor:
+             action:
+               default_name: add
+               default_description: "added a new seeder Entry"
+           ontoltoolkit: &toolkit
+             #& <id> denotes a local alias anchor property that can be used elsewhere 
+             name:     ruby-wordnet
+             version:  "1.0"
+             type:
+               name:      lexical
+               category:   
+             description:  "The ruby-wordnet gem, using it's default DB"
+             ontology:
+                name:      Wordnet
+                version:   "3.0 DefaultDB" 
+                classname: WordNet::Lexicon
+                description: "The WordNet 3.0 default DB"
+                type:     
+                  name:        lexicon
+                  category:    "english" 
+
+           algorithm:
+              name:         t2seeder.v080
+              version:      ".080"
+              description:  "This is the finest seeding algorithm in the history of the world."
+

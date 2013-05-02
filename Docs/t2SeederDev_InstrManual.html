@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="description" content=" Groove Unlimted,LLC &amp; Thesortus,LLC
+    T  T2 is the Thesortus, LLC internal name for the initial public release of the English language lexical Thesortus. To get up to speed quickly,  T2 is initially seeded with data from the WordNet 3.0 lexicon.  This file contains a set of instructions for seeding T2's database. 
+
+    Note that the procedure below assumes
+    <ol>
+      <li> a Ruby on Rails implementation </li>
+      <li> MySQL (Make the appropriate adjustments to use a different database.)
+      </li>
+    </ol>
+    It first creates a  new, empty database. Next it seeds the database with data derived from WordNet. Do not use this procedure to modify an existing database.kkkk
+    Creation Date: 1/22/2013 ">
+    <meta name="author" content="Michael J Miller">
+    <meta charset="UTF-8">
+    <meta name="keywords" content="Thesortus, Seeder, Instructions">
+    <style type="text/css">body {margin-left: auto ;
+      margin-right: auto; border:1px solid #333; padding-left:14px; padding-right:44px;}</style>
+  </head>
+  <body>
+    <h1> T2 WordNet Seeder: Administrator's Manual </h1>
+    <a id="toc"> <h3>Contents</h3>
+      <ul>
+        <li> <a href="#copyr">Copyright notice</a> </li>
+        <li> <a href="#revhist">Revision History</a></li>
+        <li> <a href="#intro">Introduction</a></li>
+        <li> <a href="#note">Notation</a></li>
+        <li> <a href="#createnewi">Creating a New Instance</a></li>
+        <li> <a href="#devi">Developing an Instance</a></li>
+        <li> <a href="#misc">Miscellanea</a></li>
+      </ul>
+      <a id="copyr"> <h3>Copyright Notice</h3></a>
+<pre>
+  # /* Copyright © 2012-2013 Groove Unlimited, LLC - All Rights Reserved
+  #  * Unauthorized copying of this file via any medium is strictly prohibited.
+  #  * Content herein may be proprietary and/or confidential.
+  #  */
+  #  *
+  #  * @author Michael J Miller &lt;mm@grooveunlimited.com&gt;
+</pre>
+      <a id="revhist"><h3>Revision History</h3></a>
+      - Edits/Additions: 3/29/2013 Added seeds.rb and partsofspeech.txt info -MjM
+      - Edits/Additions: 2/05/2013 Added ontology and ontol_tool_kit parts -MjM
+      - Creation Date: 1/22/2013  -MjM
+      <a id="intro"><h3>Introduction</h3></a>
+      <p>
+      T2 is the Thesortus, LLC internal name for the initial public release of the English language lexical Thesortus. To get up to speed quickly,  T2 is initially seeded with data from the WordNet 3.0 lexicon.  This file contains a set of instructions for seeding T2's database. 
+      </p>
+      <p>
+      Note that the procedure below assumes a Ruby on Rails implementation. 
+      </p>
+
+      <a id="nota"><h3>An Annotated & Notable Note on Notation :)</h3></a>
+      <ul>
+        <li>
+        These notes assume a standard Ruby on Rails implementation and directory structure for which the project root is denoted <code> <b>&lt;PROJ_ROOT&gt;</b></code>.
+          </li>
+          <li>
+          This file is part of a separate directory structure rooted at <code><b>&lt;T2-WN-Seeder&gt;</b></code> (for <b>T</b>hesortus <b>2</b> <b>W</b>ord<b>N</b>et <b>Seeder</b>).
+          </LI>
+        </ul>
+        <a id="createnewi"><h3>Creating a New Instance</h3></a>
+        When a new or modified database schema is employed, the following procedure can be used to create a new instance of the seeder utility. <b>Note that this procedure first  
+          creates a  new, empty database.  Do not use it to modify an existing T2 database. </b>
+        Running the app will generate a new T2 database seeded with WordNet 3.0 data.
+
+        <ol>
+          <li>  Download the latest version of the T2 DB schema: 
+          <code>&lt;thesortus_t2_schema_rev_XX.XX.sql&gt;</code> </li>
+          <br />
+          <li>  Create new SQL database named  <code>&lt;t2_db_name&gt;</code></li>
+          <br />
+          <li>  Import <code>&lt;thesortus_t2_schema_rev_XX.XX.sql&gt;</code> into database <code>&lt;t2_db_name&gt;</code> </li>
+          <br />
+          <li> The file <code><b>&lt;T2-WN-Seeder&gt;</b>/Scripts/ontology_components_2013-03-21.sql</code> contains a script to add some auxiallary tables to the database. Run the scripts on the DB. Confirm that ontology-related tables have been added.
+          </li>
+          <br />
+          <li>  At a command prompt, create and/or change into the directory which will contain the project's root directory. Note, this is <b>
+            not</b> the project's root directory.  It is its parent.<br>
+          <code> %&gt;&gt; mkdir &lt;proj_parent_directory&gt; </code> <br>
+          <code> %&gt;&gt; cd &lt;proj_parent_directory&gt; </code> <br>
+          </li>
+          <code> %proj_parent_directory &gt;&gt; </code> <br>
+          </li>
+          <br />
+          <li> Create a new rails project named <code> &lt;project_name&gt;</code>. 
+          <br /> 
+          <code> % proj_parent_directory &gt;&gt;
+            rails new &lt;project_name&gt; </code> 
+          <p>
+          Note(s):
+          <UL>
+            <LI>
+            This creates a new folder named
+            <code> &lt;project_name&gt; </code> located just below the present one, i.e.,  
+            <code> &lt;proj_parent_director&gt;/&lt;project_name&gt;</code>. This is the project root, <code> <b>&lt;PROJ_ROOT&gt;</b></code>.
+              </LI>
+            </UL>
+            </p>
+            </li>
+            <br />
+            <li>  Change into the project's root <br>
+            <code> %proj_parent_directory &gt;&gt; 
+              cd <b>&lt;PROJ_ROOT&gt;</b> </code> 
+            <br />
+            <code> %<b>&lt;PROJ_ROOT&gt;</b> &gt;&gt; </code> 
+            </li>
+            <br />
+
+            <li> <code><b>&lt;T2-WN-Seeder&gt;</b>/Scripts/Gemfile</code> contains the set of gems needed to complete these instructions.  Make sure to add those needed to <code><b>&lt;PROJ_ROOT&gt;</b>/Gemfile</code>.
+              </li>
+              <br />
+
+              <li> Install gems<br>
+              <code>
+                %<b>&lt;PROJ_ROOT&gt;</b> &gt;&gt;  bundle install
+              </code>
+              </li>
+              <br />
+              <li> Configure the database connections in <code><b>&lt;PROJ_ROOT&gt;</b>/config/database.yml</code>. See the example in <code><b>&lt;T2-WN-Seeder&gt;</b>/Scripts/database.yml</code>
+                </li>
+                <br />
+
+                <li> Reverse engineer &lt;t2_db_name&gt; using the rmre gem. Output the results into <code><b>&lt;PROJ_ROOT&gt;</b>/app/models/</code>.
+                  <p>
+                  <code>
+                    %<b>&lt;PROJ_ROOT&gt;</b> &gt;&gt;  rmre -a mysql -d &lt;t2_db_name&gt; --port port_num -u my_username -p my_password -o app/models
+                  </code>
+                  </p>
+                  e.g.,<br /><code>%<b>&lt;PROJ_ROOT&gt;</b> &gt;&gt; rmre -a mysql -d "thesortus_t2_schema_rev_00.02" -u root -o app/models/</code>
+                  <p>
+                  Note(s):
+                  <UL>
+                    <LI>
+                    This creates a <code>&lt;table_name&gt;.rb</code> file for each T2 database table. These files are located in <code><b>&lt;PROJ_ROOT&gt;</b>/app/models/</code>.
+                      </LI>
+                      <li>
+                      These files are bare-bones starting points.  Some will need to be edited during development.
+                      </li>
+                    </UL>
+                    </p>
+                    </li>
+                    <br />
+                    <li>
+                    Create a schema.rb file from the database.<br />
+                    <code>%<b>&lt;PROJ_ROOT&gt;</b> &gt;&gt; rake db:schema:dump</code> 
+                    <p>
+                    Note(s):
+                    <UL>
+                      <LI>
+                      This requires a correctly specified and formatted <b>&lt;PROJ_ROOT&gt;</b>/config/database.yml</code>  file. An error complaining about the inability to parse YAML may mean there is a syntax error in database.yml. (Several times I've been stumped by the error msg when I had left out a space after the colon(:) on the database: line.)  
+                      </LI>
+                      <LI>
+                      The resulting schema.rb file will be located in <b>&lt;PROJ_ROOT&gt;</b>/db/schema.rb</code>.
+                      </LI>
+                    </UL>
+                    </p>
+                    </li>
+                    <br />
+                    <li> Copy  <code><b>&lt;T2-WN-Seeder&gt;</b>/Scripts/loadt2seederconfig.rb</code> into <code><b>&lt;PROJ_ROOT&gt;</b>/config/initializers/</code>. 
+                      </li>
+                      <br />
+                      <li> Create and edit <code><b>&lt;PROJ_ROOT&gt;</b>/config/t2seederconfig.yml</code>. This file will contain the projects properties. An example is located in <code><b>&lt;T2-WN-Seeder&gt;</b>/Scripts/t2seederconfig.yml</code>
+                        </li>
+                        <br />
+                        <li> Create and edit a new ruby module file:  <code><b>&lt;PROJ_ROOT&gt;</b></code> An example is located in <code><b>&lt;T2-WN-Seeder&gt;</b>/Scripts/t2Seeder.rb.</code>
+                        </li>
+                        <br />
+                        <li> Copy  <code><b>&lt;T2-WN-Seeder&gt;</b>/Scripts/partsofspeech.txt</code> into <code><b>&lt;PROJ_ROOT&gt;</b>/db/partsofspeech.rb</code>
+                      </li>
+                        <br />
+                        <li> Copy  <code><b>&lt;T2-WN-Seeder&gt;</b>/Scripts/seeds.rb</code> into <code><b>&lt;PROJ_ROOT&gt;</b>/db/seeds.rb</code>
+                      </li>
+                      <br />
+                    <li>
+                    Populate the th_part_of_speech database table with content from  <code><b>&lt;PROJ_ROOT&gt;</b>/db/partsofspeech.rb </code> using the script in <code><b>&lt;PROJ_ROOT&gt;</b>/db/seeds.rb.</code> 
+                   <br />
+                    <code>%<b>&lt;PROJ_ROOT&gt;</b> &gt;&gt; rake db:seed</code> 
+                    <br />
+                    <br />
+                        <li> At this point you can start the rails server, run the instance (see below), and/or further develop the seeder. To start the server...
+                        <br />
+                        <code>%<b>&lt;PROJ_ROOT&gt;</b> &gt;&gt; rails s</code>
+                        </li>
+                      </ol>
+                      <a id="devi"><h3>Developing an Instance</h3></a>
+                      TODO: <font color='RED'>This section is in need of major updates.  Do not use as is!</font><br />
+                      TODO: Add intro to this section<br />
+                      TODO: Add note here <b>Note: </b>
+
+                      <ol>
+                        <LI>
+                        Start MySQL server for the database <code>&lt;t2_db_name&gt;</code>
+                        </LI>
+                        <br />
+                        <li>  Change into the T2 WordNet Seeder project's root directory<br>
+                        <code> %proj_parent_directory &gt;&gt; 
+                          cd <b>&lt;PROJ_ROOT&gt;</b> </code> 
+                        <br />
+                        <code> %<b>&lt;PROJ_ROOT&gt;</b> &gt;&gt; </code> 
+                        </li>
+                        <br />
+                        <li> Start the rails server
+                        <code>
+                          <pre>
+    %<b>&lt;PROJ_ROOT&gt;</b> &gt;&gt;  rails s
+    => Booting WEBrick
+    => Rails 3.2.11 application starting in development on http://0.0.0.0:3000
+    => Call with -d to detach
+    => Ctrl-C to shutdown server
+    [2013-02-22 18:23:25] INFO  WEBrick 1.3.1
+    [2013-02-22 18:23:25] INFO  ruby 1.9.3 (2011-10-30) [x86_64-darwin10.8.0]
+    [2013-02-22 18:23:25] INFO  WEBrick::HTTPServer#start: pid=27824 port=3000j
+  </pre>
+                        </code>
+                        <li> Start a rails console.  If using PRY, 
+                        <code>
+                          <pre>
+    %<b>&lt;PROJ_ROOT&gt;</b> &gt;&gt;  pry -r ./config/environment.rb
+    1.9.3 (main):0 > 
+</pre>
+                        </code>
+                        </li>  
+                        <li> From the PRY prompt, load T2's seeder's main config file, 
+                        <code>
+                          <pre>
+    1.9.3 (main):0 > load 'config/loadt2configfile.rb'
+    1.9.3 (main):0 > TODO: COMPLETE THIS PRY RESPONSE TO LOADING THE CONFIG FILE.
+</pre>
+                        </code>
+                      </ol>
+                      <hr />
+                      <a id="misc"><h3>Miscellanea</h3></a>
+                      <ol>
+                        <li>
+                        To duplicate a db from the command line:
+                        <ol>
+                          <li>
+                          Create the target db using MySQLAdmin or your preferred method
+                          </li>
+                          <li>
+                          Execute the following statement on a command line: <br />
+                          <pre>
+ <code> %&gt;&gt; mysqldump -h [server] -u [user] -p[password] db1 | mysql -h [server] -u [user] -p[password] db2</code>
+     </pre>
+                          Note(s): 
+                          <UL>
+                            <LI>
+                            There is NO space between -p and [password]) 
+                            </LI>
+                            <LI>
+                            -h [server] unecessary when using local socket.
+                            </li>
+                          </ul>
+                          </li>
+                        </ol>
+                      </ol>
+                      <hr color="RED"/>
+                      <ul>
+                        <li> <a href="#toc">Top of Page</a> </li>
+                        <li> <a href="#copyr">Copyright notice</a> </li>
+                        <li> <a href="#revhist">Revision History</a></li>
+                        <li> <a href="#intro">Introduction</a></li>
+                        <li> <a href="#createnewi">Creating a New Instance</a></li>
+                        <li> <a href="#devi">Developing an Instance</a></li>
+                        <li> <a href="#misc">Miscellanea</a></li>
+                      </ul>
+                    </body>
+                  </html>

@@ -1,0 +1,136 @@
+Groove Unlimted,LLC & Thesortus,LLC
+***********************************
+T2 is the Thesortus, LLC internal name for the initial public release of the English language lexical Thesortus. To get up to speed quickly,  T2 is initially seeded with data from the WordNet 3.0 lexicon.  This file contains a set of instructions for seeding T2's database. 
+
+Note that the procedure below assumes a Ruby on Rails implementation. It creates a  new, empty database. Do not use this procedure to modify an existing database.
+
+Author: Michael J Miller
+
+Creation Date: 1/22/2013
+***********************************
+
+
+  1.  Download the latest version of the T2 DB schema, <thesortus_t2_schema_rev_XX.XX.sql>
+
+  2.  Create new SQL database,  named <t2_db_name>
+
+  3.  Import <thesortus_t2_schema_rev_XX.XX.sql> into database <t2_db_name>
+
+  4.  At a command prompt create a new rails project named <project_name>
+          %> rails new <project_name>
+
+  5.  Change into the project's root directory
+          %> cd <project_name>
+
+  (NOTATION: "PROJ_ROOT" denotes the new project's root directory.)
+
+  6.  Add the following to PROJ_ROOT/Gemfile
+          gem 'mysql2'
+          gem 'activerecord-mysql-adapter'
+          gem 'yaml_db'
+          gem 'wordnet'
+          gem 'wordnet-defaultdb'
+          gem install rmre
+          
+     # The following lines are optional
+          group :development do
+            gem 'pry'
+            gem 'pry-rails'
+            gem 'pry-doc'
+          end
+        
+          group :test do
+             gem 'factory_girl_rails'
+             gem 'capybara'
+             gem 'minitest'
+             gem 'turn'
+          end
+     # End optional additions
+
+    7. Install gems
+          %PROJ_ROOT>  bundle install
+
+    8. Configure the database connections in PROJ_ROOT/database.yml
+        e.g.,
+            development:
+              adapter: mysql2
+              encoding: utf8
+              reconnect: false
+              database: <t2_db_name>
+            pool: 5
+            username: root
+            password:
+            socket: /tmp/mysql.sock
+         
+     9. Reverse engineer <t2_db_name> using the rmre gem. Output the results into PROJ_ROOT/app/models
+            %PROJ_ROOT>  rmre -a mysql -d <t2_db_name> --port port_num -u my_username -p my_password -o app/models
+            
+              e.g., rmre -a mysql -d "thesortus_t2_schema_rev_00.02" -u root -o app/models/
+
+     10. Create and edit a new file:  PROJ_ROOT/config/initializers/<load_config_filename>.rb.  Add the following lines to the file:
+
+              raw_config = File.read(Rails.root + "config/<config_filename>.yml")
+              APP_CONFIG = YAML.load(raw_config)[Rails.env]
+
+              # For developing aspects of the seeder, the following is convenient. 
+              # It is a call to an entry point of T2Seeder
+                     unless Rails.env=="production"
+                        load Rails.root+"app/<getItGoing_filename>.rb.  (See below for more on this file.)
+                        include <module_name_found_in_getItGoing_filename>
+                     end
+
+     11. Create and edit a new file:  PROJ_ROOT/config/<config_filename>.yml. This file will contain the projects properties.  Below is an example only of a properties files for this project.
+          development:
+            user:
+              username: t3seeder_02b 
+              password: abc123
+            ontoltoolkit: &toolkit       
+              #&<id> denotes a local alias anchor property that can be used elsewhere 
+            name:     ruby-wordnet
+            version:  "1.0"
+            type:
+              name:      lexical
+              category:
+                description:  "The ruby-wordnet gem, using it's default DB"
+                ontology:
+                  name:      Wordnet
+                  version:   "3.0 DefaultDB" 
+                  classname: WordNet::Lexicon
+                  type:     
+                  name:        lexicon
+                  category:    english 
+            algorithm:
+              name:         t2seeder
+              version:      ".02a"
+              description:  "This is the finest seeding algorithm in the history of the world."
+            test:
+              lextoolkit: *toolkit 
+                #*<id> is an alias indicator, i.e., a reference to anchored &<id> 
+              algorithm:
+                name:    t2seeder
+                version:   ".02t" 
+              production:
+              #End properties file example
+
+
+     12. Create and edit a new ruby module file:  PROJ_ROOT/app/<getItGoing_filename>.rb.  The following is an example only of the contents of <getItGoing_filename>.rb.  Object names may need to be changed.
+
+ module <module_name>
+  USER_Props =APP_CONFIG["user"] # Pre-configures user properties
+  MyUser  = ThUser.find_or_create_by_username(USER_Props["username"])
+  # Note: Before save, MyUser's other attributes are initialized in the ThUser model
+
+#TODO Am I still using OntolToolKit?
+  OTK_Props = APP_CONFIG["ontoltoolkit"] # Pre-configured ontology tool kit properties
+  MyToolKit  = OntolToolKit.find_or_create_by_name_and_version(OTK_Props["name"], OTK_Props["version"])
+  # Note: Before save, MyToolKit's other attributes are initialized in OntolToolKit model
+  MyToolKit.update_attribute(:otk_type,OntolToolKitType.find_or_create_by_name_and_category(OTK_Props["type"]["name"],OTK_Props["type"]["category"]).id)
+
+   ONTOL_Props = OTK_Props["ontology"] # Pre-configured ontology 
+#TODO This is incomplete
+
+             end #module 
+
+     10. At this point you can start the rails server
+            %PROJ_ROOT>  rails s
+

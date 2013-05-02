@@ -1,0 +1,9 @@
+ adjective: { name: 'adjective', abbr: 'adj.' },
+ adverb: { name: 'adverb', abbr: 'adv.' },
+ conjunction: { name: 'conjunction', abbr: 'conj.' },
+ interjection: { name: 'interjection', abbr: 'inter.' },
+ noun: { name: 'noun', abbr: 'noun' },
+ preposition: { name: 'preposition', abbr: 'prep.' },
+ pronoun: { name: 'pronoun', abbr: 'pron.' },
+ verb: { name: 'verb', abbr: 'verb' },
+ adjective satellite: {name:'adjective satellite', abbr: 'adj.s.}

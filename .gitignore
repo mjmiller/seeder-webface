@@ -13,6 +13,8 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+/Code/T2Seeder/tmp
+/Code/T2Seeder/log/*.log
 
 # Ignore .DS_STORE
 .DS_Store
