@@ -247,6 +247,7 @@ DEPENDENCIES
   jquery-rails
   linguistics
   minitest
+  mysql
   pg
   pry
   pry-debugger

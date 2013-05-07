@@ -6,7 +6,6 @@ gem  'rails', '3.2.13'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
-  gem 'pg'  #PostgreSQL
   gem 'activerecord-mysql-adapter'
   gem 'yaml_db'
   gem 'wordnet'
@@ -18,6 +17,13 @@ gem  'rails', '3.2.13'
   gem 'squeel'
   gem 'heroku'
   gem 'thin'
+group :development, :test do
+  gem 'mysql'
+end
+
+group :production do
+  gem 'pg'
+end
 
   ## The following lines are optional
   group :development do
